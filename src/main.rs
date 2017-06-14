@@ -19,8 +19,7 @@ use ipnetwork::{
 
 fn main() {
 
-    let ip4 = Ipv4Addr::new(192, 168, 0, 1);
-    let network = Ipv4Network::new(ip4, 24).unwrap();
+    let network: Ipv4Network = "192.168.0.1/24".parse().unwrap();
     let network_addr = network.network();
     let broadcast = network.broadcast();
 
