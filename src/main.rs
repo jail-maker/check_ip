@@ -21,28 +21,40 @@ fn main() {
 
     let ip4 = Ipv4Addr::new(192, 168, 0, 1);
     let network = Ipv4Network::new(ip4, 24).unwrap();
+    let network_addr = network.network();
+    let broadcast = network.broadcast();
 
     for addr in network.iter() {
 
+        if addr == broadcast || addr == network_addr {
+            continue; 
+        }
+
         let mut child = Command::new("ping")
             .arg("-c 1")
+            .arg("-i 0")
             .arg("-W 10")
+            .arg("-o")
             .arg(format!("{}", addr))
             .stdin(Stdio::null())
             .stdout(Stdio::null())
+            .stderr(Stdio::null())
             .spawn()
             .expect("error");
 
         let ecode = child.wait()
             .expect("error");
 
-        if !ecode.success() {
+        if ecode.success() { continue; }
 
-            println!("{:?}", addr);
+        match ecode.code().unwrap() {
 
-            break;
+            2 => println!("{:?}", addr),
+            _ => continue
 
         }
+
+        break;
 
     }
 
