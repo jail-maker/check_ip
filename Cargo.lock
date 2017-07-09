@@ -2,13 +2,13 @@
 name = "check_ip"
 version = "0.1.0"
 dependencies = [
- "ipnetwork 0.12.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ipnetwork 0.12.5 (git+https://github.com/achanda/ipnetwork?rev=9920316)",
 ]
 
 [[package]]
 name = "ipnetwork"
 version = "0.12.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "git+https://github.com/achanda/ipnetwork?rev=9920316#99203160b9e3d51e8262d6e4ec28795da3cf9026"
 
 [metadata]
-"checksum ipnetwork 0.12.5 (registry+https://github.com/rust-lang/crates.io-index)" = "94bef9ae83448a9da2ca8fadde0959c9cc3092d063eea4b489ca0018d0003960"
+"checksum ipnetwork 0.12.5 (git+https://github.com/achanda/ipnetwork?rev=9920316)" = "<none>"
