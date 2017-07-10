@@ -5,6 +5,10 @@ authors = ["Bykov Igor <igorb.dev@websm.io>"]
 
 [dependencies]
 
+[dependencies.clap]
+version = "2.25.0"
+features = ["yaml"]
+
 [dependencies.ipnetwork]
 git = "https://github.com/achanda/ipnetwork"
 rev = "9920316"

@@ -1,0 +1,20 @@
+---
+name: check_ip
+version: "0.1.0"
+author: Igor Bykov <con29rus@live.ru>
+about: Check a free ip adress in network pool
+args:
+    - ipv4:
+        short: '4'
+        long: ipv4
+        value_name: ipaddress/prefix
+        takes_value: true
+    - ipv6:
+        short: '6'
+        long: ipv6
+        value_name: ipaddress/prefix
+        takes_value: true
+    - json:
+        short: 'j'
+        long: json
+        help: Set the output format to JSON
