@@ -82,7 +82,7 @@ fn get_free4(ip: &str) {
 
         match ecode.code().unwrap() {
 
-            2 => println!("free: {:?}", addr),
+            2 => println!("free ipv4: {:?}", addr),
             _ => break
 
         }
@@ -105,7 +105,7 @@ fn get_free6(ip: &str) {
 
         match ecode.code().unwrap() {
 
-            2 => println!("free: {:?}", addr),
+            2 => println!("free ipv6: {:?}", addr),
             _ => break
 
         }
