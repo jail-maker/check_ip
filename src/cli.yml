@@ -2,7 +2,7 @@
 name: check_ip
 version: "0.1.0"
 author: Igor Bykov <con29rus@live.ru>
-about: Check a free ip adress in network pool
+about: Check a free ip address in network pool
 args:
     - ipv4:
         short: '4'
