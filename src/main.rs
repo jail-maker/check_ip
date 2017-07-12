@@ -1,6 +1,8 @@
 extern crate ipnetwork;
 #[macro_use]
 extern crate clap;
+#[macro_use]
+extern crate serde_json;
 
 use clap::App;
 
@@ -124,8 +126,17 @@ fn main() {
     let v4 = matches.value_of("ipv4");
     let v6 = matches.value_of("ipv6");
 
-    println!("{:?}", v4);
-    println!("{:?}", v6);
+    match (matches.occurrences_of("json")) {
+        1 => {
+            let j = json!({
+                "free_4": v4.unwrap_or(""),
+                "free_6": v6.unwrap_or(""),
+            });
+
+            println!("{}", j);
+        },
+        _ => ()
+    }
 
     match (v6) {
         Some(ip) => get_free6(ip),
