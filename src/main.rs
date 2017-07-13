@@ -29,7 +29,7 @@ fn ping4(ip: Ipv4Addr) -> ExitStatus {
     let mut child = Command::new("ping")
         .arg("-c 1")
         .arg("-i 0")
-        .arg("-W 10")
+        .arg("-t 1")
         .arg("-o")
         .arg(format!("{}", ip))
         .stdin(Stdio::null())
@@ -50,7 +50,7 @@ fn ping6(ip: Ipv6Addr) -> ExitStatus {
     let mut child = Command::new("ping6")
         .arg("-c 1")
         .arg("-i 0")
-        .arg("-X 10")
+        .arg("-X 1")
         .arg("-o")
         .arg(format!("{}", ip))
         .stdin(Stdio::null())
@@ -98,8 +98,11 @@ fn get_free4(ip: &str) {
 fn get_free6(ip: &str) {
 
     let network: Ipv6Network = ip.parse().unwrap();
+    let network_addr = network.network();
 
     for addr in network.iter() {
+
+        if addr == network_addr { continue; }
 
         let ecode = ping6(addr);
 
