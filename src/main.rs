@@ -6,23 +6,11 @@ extern crate serde_json;
 
 use clap::App;
 
-use std::net::{
-    Ipv4Addr,
-    Ipv6Addr,
-    SocketAddr,
-    IpAddr
-};
+use std::net::*;
 
-use std::process::{
-    Command,
-    Stdio,
-    ExitStatus
-};
+use std::process::*;
 
-use ipnetwork::{
-    Ipv4Network,
-    Ipv6Network
-};
+use ipnetwork::*;
 
 fn ping4(ip: Ipv4Addr) -> ExitStatus {
 
@@ -66,11 +54,13 @@ fn ping6(ip: Ipv6Addr) -> ExitStatus {
 
 }
 
-fn get_free4(ip: &str) {
+fn get_free4(ip: &str) -> Option<Ipv4Addr> {
 
     let network: Ipv4Network = ip.parse().unwrap();
     let network_addr = network.network();
     let broadcast = network.broadcast();
+
+    let mut result = None;
 
     for addr in network.iter() {
 
@@ -80,25 +70,28 @@ fn get_free4(ip: &str) {
 
         let ecode = ping4(addr);
 
-        if ecode.success() { continue; }
-
         match ecode.code().unwrap() {
 
-            2 => println!("free ipv4: {:?}", addr),
+            0 => continue,
+            2 => {
+                result = Some(addr);
+                break;
+            },
             _ => break
 
-        }
-
-        break;
+        };
 
     }
 
+    result
+
 }
 
-fn get_free6(ip: &str) {
+fn get_free6(ip: &str) -> Option<Ipv6Addr> {
 
     let network: Ipv6Network = ip.parse().unwrap();
     let network_addr = network.network();
+    let mut result = None;
 
     for addr in network.iter() {
 
@@ -106,18 +99,20 @@ fn get_free6(ip: &str) {
 
         let ecode = ping6(addr);
 
-        if ecode.success() { continue; }
-
         match ecode.code().unwrap() {
 
-            2 => println!("free ipv6: {:?}", addr),
+            0 => continue,
+            2 => {
+                result = Some(addr);
+                break;
+            },
             _ => break
 
-        }
-
-        break;
+        };
 
     }
+
+    result
 
 }
 
@@ -129,65 +124,26 @@ fn main() {
     let v4 = matches.value_of("ipv4");
     let v6 = matches.value_of("ipv6");
 
-    match (matches.occurrences_of("json")) {
+    let free6 = match v6 {
+        Some(ip) => get_free6(ip),
+        None => None
+    };
+
+    let free4 = match v4 {
+        Some(ip) => get_free4(ip),
+        None => None
+    };
+
+    match matches.occurrences_of("json") {
         1 => {
             let j = json!({
-                "free_4": v4.unwrap_or(""),
-                "free_6": v6.unwrap_or(""),
+                "free4": v4.unwrap_or(""),
+                "free6": v6.unwrap_or(""),
             });
 
             println!("{}", j);
         },
         _ => ()
-    }
-
-    match (v6) {
-        Some(ip) => get_free6(ip),
-        None => ()
-    }
-
-    match (v4) {
-        Some(ip) => get_free4(ip),
-        None => ()
-    }
-
-
-    // let network: Ipv4Network = "192.168.0.1/24".parse().unwrap();
-    // let network_addr = network.network();
-    // let broadcast = network.broadcast();
-
-    // for addr in network.iter() {
-
-    //     if addr == broadcast || addr == network_addr {
-    //         continue; 
-    //     }
-
-    //     let mut child = Command::new("ping")
-    //         .arg("-c 1")
-    //         .arg("-i 0")
-    //         .arg("-W 10")
-    //         .arg("-o")
-    //         .arg(format!("{}", addr))
-    //         .stdin(Stdio::null())
-    //         .stdout(Stdio::null())
-    //         .stderr(Stdio::null())
-    //         .spawn()
-    //         .expect("error");
-
-    //     let ecode = child.wait()
-    //         .expect("error");
-
-    //     if ecode.success() { continue; }
-
-    //     match ecode.code().unwrap() {
-
-    //         2 => println!("{:?}", addr),
-    //         _ => continue
-
-    //     }
-
-    //     break;
-
-    // }
+    };
 
 }
