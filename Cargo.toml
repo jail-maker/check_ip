@@ -11,6 +11,5 @@ version = "2.25.0"
 features = ["yaml"]
 
 [dependencies.ipnetwork]
-git = "https://github.com/achanda/ipnetwork"
-rev = "1abf10d"
+version = "0.12.6"
 features = ["ipv6-iterator", "ipv6-methods"]
