@@ -54,7 +54,7 @@ fn ping6(ip: Ipv6Addr) -> ExitStatus {
 
 }
 
-fn get_free4(ip: &str) -> Option<Ipv4Addr> {
+fn get_free4(ip: &str) -> Option<String> {
 
     let network: Ipv4Network = ip.parse().unwrap();
     let network_addr = network.network();
@@ -74,6 +74,7 @@ fn get_free4(ip: &str) -> Option<Ipv4Addr> {
 
             0 => continue,
             2 => {
+                let addr = format!("{}", addr);
                 result = Some(addr);
                 break;
             },
@@ -87,7 +88,7 @@ fn get_free4(ip: &str) -> Option<Ipv4Addr> {
 
 }
 
-fn get_free6(ip: &str) -> Option<Ipv6Addr> {
+fn get_free6(ip: &str) -> Option<String> {
 
     let network: Ipv6Network = ip.parse().unwrap();
     let network_addr = network.network();
@@ -103,6 +104,7 @@ fn get_free6(ip: &str) -> Option<Ipv6Addr> {
 
             0 => continue,
             2 => {
+                let addr = format!("{}", addr);
                 result = Some(addr);
                 break;
             },
@@ -134,16 +136,21 @@ fn main() {
         None => None
     };
 
+    let default = String::new();
+
     match matches.occurrences_of("json") {
         1 => {
-            let j = json!({
-                "free4": v4.unwrap_or(""),
-                "free6": v6.unwrap_or(""),
+            let json = json!({
+                "free4": free4.unwrap_or(default.clone()),
+                "free6": free6.unwrap_or(default.clone()),
             });
 
-            println!("{}", j);
+            println!("{}", json);
         },
-        _ => ()
+        _ => {
+            println!("free4: {}", free4.unwrap_or(default.clone()));
+            println!("free6: {}", free6.unwrap_or(default.clone()));
+        }
     };
 
 }
