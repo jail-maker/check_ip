@@ -137,20 +137,22 @@ fn main() {
     };
 
     let default = String::new();
+    let as_json = matches.occurrences_of("json");
 
-    match matches.occurrences_of("json") {
-        1 => {
-            let json = json!({
-                "free4": free4.unwrap_or(default.clone()),
-                "free6": free6.unwrap_or(default.clone()),
-            });
+    if as_json >= 1 {
 
-            println!("{}", json);
-        },
-        _ => {
-            println!("free4: {}", free4.unwrap_or(default.clone()));
-            println!("free6: {}", free6.unwrap_or(default.clone()));
-        }
-    };
+        let json = json!({
+            "free4": free4.unwrap_or(default.clone()),
+            "free6": free6.unwrap_or(default.clone()),
+        });
+
+        println!("{}", json);
+
+    } else {
+
+        if let Some(ip) = free4 { println!("free4: {}", ip) }
+        if let Some(ip) = free6 { println!("free6: {}", ip) }
+
+    }
 
 }
