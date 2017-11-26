@@ -121,7 +121,18 @@ fn get_free6(ip: &str) -> Option<String> {
 fn main() {
 
     let yaml = load_yaml!("cli.yml");
-    let matches = App::from_yaml(yaml).get_matches();
+    let app = App::from_yaml(yaml);
+    let matches = app.get_matches();
+
+    let mut count = matches.occurrences_of("ipv4");
+    count += matches.occurrences_of("ipv6");
+
+    if count == 0 {
+
+        println!("{}", matches.usage());
+        exit(1);
+
+    }
 
     let v4 = matches.value_of("ipv4");
     let v6 = matches.value_of("ipv6");
