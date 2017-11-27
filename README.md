@@ -3,7 +3,7 @@
 
 1. Install rust and cargo via [rustup](https://www.rust-lang.org/en-US/install.html)
 2. Select default toolchain nightly.
-3. Change progect directory `$ cd check_ip`
+3. Change project directory `$ cd check_ip`
 4. Start building run: `$ cargo build --release`
 5. Copy binary file `$ cp target/release/check_ip /usr/local/bin/check_ip`
  
